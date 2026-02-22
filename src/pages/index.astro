@@ -16,6 +16,34 @@ const featuredStars = Math.round(featuredAvg);
 // Remaining posts for the grid
 const gridPosts = allPosts.filter(p => p.slug !== featured.slug);
 
+// Coming-soon stubs (add real entries to src/content/blog/ when ready)
+const comingSoon = [
+  {
+    slug: 'arriving-rio',
+    title: 'Arriving in Rio After 22 Hours in the Air',
+    excerpt: "Some cities hit you the moment the door opens. The humidity, the noise, the green of the hills — Rio doesn't wait for you to be ready.",
+    date: 'Oct 2025',
+    location: 'Rio de Janeiro, Brazil',
+    category: 'travel',
+    country: 'brazil',
+    cardImage: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80',
+    breakdown: [{ label: 'Overall', score: 4.0 }],
+    readTime: '',
+  },
+  {
+    slug: 'nemesis-coffee-vancouver',
+    title: 'Nemesis Coffee — The Neighbourhood Place That Isn\'t Trying Hard',
+    excerpt: 'Good coffee, a nice stool by the window, and nobody asking you to leave. Sometimes that\'s everything.',
+    date: 'Sep 2025',
+    location: 'Vancouver, Canada',
+    category: 'coffee',
+    country: 'canada',
+    cardImage: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80',
+    breakdown: [{ label: 'Overall', score: 5.0 }],
+    readTime: '',
+  },
+];
+
 // Flag emoji map — add new countries here as you visit them
 const flagMap: Record<string, string> = {
   canada: '🇨🇦',
@@ -48,39 +76,10 @@ const flagMap: Record<string, string> = {
 };
 
 // Build unique sorted country list from all posts + coming-soon stubs
-const comingSoonCountries = comingSoon.map(s => s.country);
 const allCountries = [...new Set([
   ...allPosts.map(p => p.data.country),
-  ...comingSoonCountries,
+  ...comingSoon.map(s => s.country),
 ])].sort();
-
-// Coming-soon stubs (add real entries to src/content/blog/ when ready)
-const comingSoon = [
-  {
-    slug: 'arriving-rio',
-    title: 'Arriving in Rio After 22 Hours in the Air',
-    excerpt: "Some cities hit you the moment the door opens. The humidity, the noise, the green of the hills — Rio doesn't wait for you to be ready.",
-    date: 'Oct 2025',
-    location: 'Rio de Janeiro, Brazil',
-    category: 'travel',
-    country: 'brazil',
-    cardImage: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80',
-    breakdown: [{ label: 'Overall', score: 4.0 }],
-    readTime: '',
-  },
-  {
-    slug: 'nemesis-coffee-vancouver',
-    title: 'Nemesis Coffee — The Neighbourhood Place That Isn\'t Trying Hard',
-    excerpt: 'Good coffee, a nice stool by the window, and nobody asking you to leave. Sometimes that\'s everything.',
-    date: 'Sep 2025',
-    location: 'Vancouver, Canada',
-    category: 'coffee',
-    country: 'canada',
-    cardImage: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80',
-    breakdown: [{ label: 'Overall', score: 5.0 }],
-    readTime: '',
-  },
-];
 ---
 
 <BaseLayout
