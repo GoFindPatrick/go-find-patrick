@@ -1,0 +1,46 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: public/images
+public_folder: /images
+
+collections:
+  - name: blog
+    label: Blog Posts
+    folder: src/content/blog
+    create: true
+    slug: "{{category}}-{{slug}}"
+    extension: md
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Excerpt, name: excerpt, widget: text }
+      - { label: Date, name: date, widget: string, hint: "e.g. February 2026" }
+      - { label: Location, name: location, widget: string, hint: "e.g. Seoul, South Korea" }
+      - label: Country
+        name: country
+        widget: select
+        options: [canada, korea, vietnam, brazil, other]
+      - label: Category
+        name: category
+        widget: select
+        options: [hotel, food, coffee, travel]
+      - { label: Hero Image URL, name: heroImage, widget: string }
+      - { label: Card Image URL, name: cardImage, widget: string, required: false }
+      - { label: Rating Name, name: ratingName, widget: string, hint: "e.g. The Shilla Seoul" }
+      - label: Breakdown Ratings
+        name: breakdown
+        widget: list
+        fields:
+          - { label: Label, name: label, widget: string }
+          - { label: Score (0–5), name: score, widget: number, valueType: float, min: 0, max: 5, step: 0.5 }
+      - { label: Read Time, name: readTime, widget: string, hint: "e.g. 6 min read" }
+      - { label: Published, name: published, widget: boolean, default: true }
+      - { label: Featured, name: featured, widget: boolean, default: false }
+      - { label: Coming Soon, name: comingSoon, widget: boolean, default: false }
+      - label: Gallery Image URLs
+        name: gallery
+        widget: list
+        field: { label: URL, name: url, widget: string }
+        required: false
+      - { label: Body, name: body, widget: markdown }

@@ -1,0 +1,219 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+// Fetch all published posts, sorted newest first
+const allPosts = await getCollection('blog', ({ data }) => data.published);
+allPosts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime() || 0);
+
+// Featured post for the hero (first with featured:true, else first post)
+const featured = allPosts.find(p => p.data.featured) ?? allPosts[0];
+const featuredAvg = featured.data.breakdown.reduce((s, i) => s + i.score, 0) / featured.data.breakdown.length;
+const featuredAvgRounded = (Math.round(featuredAvg * 10) / 10).toFixed(1);
+const featuredStars = Math.round(featuredAvg);
+
+// Remaining posts for the grid
+const gridPosts = allPosts.filter(p => p.slug !== featured.slug);
+
+// Coming-soon stubs (add real entries to src/content/blog/ when ready)
+const comingSoon = [
+  {
+    slug: 'arriving-rio',
+    title: 'Arriving in Rio After 22 Hours in the Air',
+    excerpt: "Some cities hit you the moment the door opens. The humidity, the noise, the green of the hills — Rio doesn't wait for you to be ready.",
+    date: 'Oct 2025',
+    location: 'Rio de Janeiro, Brazil',
+    category: 'travel',
+    country: 'brazil',
+    cardImage: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80',
+    breakdown: [{ label: 'Overall', score: 4.0 }],
+    readTime: '',
+  },
+  {
+    slug: 'nemesis-coffee-vancouver',
+    title: 'Nemesis Coffee — The Neighbourhood Place That Isn\'t Trying Hard',
+    excerpt: 'Good coffee, a nice stool by the window, and nobody asking you to leave. Sometimes that\'s everything.',
+    date: 'Sep 2025',
+    location: 'Vancouver, Canada',
+    category: 'coffee',
+    country: 'canada',
+    cardImage: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80',
+    breakdown: [{ label: 'Overall', score: 5.0 }],
+    readTime: '',
+  },
+];
+---
+
+<BaseLayout
+  title="Go Find Patrick"
+  description="Hotels, food, coffee and travel — written like a journal, not a review site."
+  ogImage={featured.data.heroImage}
+>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img class="hero-image" src={featured.data.heroImage} alt={featured.data.title} />
+    <div class="hero-content">
+      <span class="hero-category-tag">
+        {featured.data.category.charAt(0).toUpperCase() + featured.data.category.slice(1)} Review
+      </span>
+      <p class="hero-meta">{featured.data.location} &nbsp;·&nbsp; {featured.data.date}</p>
+      <h1 class="hero-title">{featured.data.title}</h1>
+      <p class="hero-excerpt">{featured.data.excerpt}</p>
+      <div class="hero-rating">
+        <span class="rating-label">Patrick's Rating</span>
+        <div class="rating-stars">
+          {Array.from({ length: 5 }, (_, i) => (
+            <span class:list={['star', i >= featuredStars && 'empty']}>★</span>
+          ))}
+        </div>
+        <span style="font-size:0.75rem;color:rgba(255,255,255,0.65);font-family:'DM Mono',monospace;">
+          {featuredAvgRounded}
+        </span>
+      </div>
+      <a href={`/blog/${featured.slug}`} class="hero-btn">Read the full stay &nbsp;→</a>
+    </div>
+  </section>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar" id="filterBar">
+    <div class="filter-group">
+      <span class="filter-label">Destination</span>
+      <button class="filter-btn dest-btn active" data-value="all">All</button>
+      <button class="filter-btn dest-btn" data-value="canada">🇨🇦 Canada</button>
+      <button class="filter-btn dest-btn" data-value="korea">🇰🇷 Korea</button>
+      <button class="filter-btn dest-btn" data-value="vietnam">🇻🇳 Vietnam</button>
+      <button class="filter-btn dest-btn" data-value="brazil">🇧🇷 Brazil</button>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Type</span>
+      <button class="filter-btn type-btn active" data-value="all">All</button>
+      <button class="filter-btn type-btn" data-value="hotel">🏨 Hotels</button>
+      <button class="filter-btn type-btn" data-value="food">🍜 Food</button>
+      <button class="filter-btn type-btn" data-value="coffee">☕ Coffee</button>
+      <button class="filter-btn type-btn" data-value="travel">✈️ Travel</button>
+    </div>
+  </div>
+
+  <!-- POST GRID -->
+  <section class="grid-section">
+    <div class="section-header">
+      <h2 class="section-title">Latest from the road</h2>
+    </div>
+
+    <div class="post-grid" id="postGrid">
+
+      <!-- Featured post as wide card -->
+      <PostCard
+        slug={featured.slug}
+        title={featured.data.title}
+        excerpt={featured.data.excerpt}
+        date={featured.data.date}
+        location={featured.data.location}
+        category={featured.data.category}
+        country={featured.data.country}
+        cardImage={featured.data.cardImage ?? featured.data.heroImage}
+        breakdown={featured.data.breakdown}
+        readTime={featured.data.readTime}
+        wide={true}
+      />
+
+      <!-- Remaining published posts -->
+      {gridPosts.map(post => (
+        <PostCard
+          slug={post.slug}
+          title={post.data.title}
+          excerpt={post.data.excerpt}
+          date={post.data.date}
+          location={post.data.location}
+          category={post.data.category}
+          country={post.data.country}
+          cardImage={post.data.cardImage ?? post.data.heroImage}
+          breakdown={post.data.breakdown}
+          readTime={post.data.readTime}
+        />
+      ))}
+
+      <!-- Coming soon stubs -->
+      {comingSoon.map(stub => (
+        <PostCard
+          slug={stub.slug}
+          title={stub.title}
+          excerpt={stub.excerpt}
+          date={stub.date}
+          location={stub.location}
+          category={stub.category}
+          country={stub.country}
+          cardImage={stub.cardImage}
+          breakdown={stub.breakdown}
+          readTime={stub.readTime}
+          comingSoon={true}
+        />
+      ))}
+
+    </div>
+
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <p class="empty-icon">✈️</p>
+      <p class="empty-heading">No posts yet for this combination</p>
+      <p class="empty-sub">Try a different type or destination — more posts are on the way.</p>
+    </div>
+  </section>
+
+  <!-- DIVIDER -->
+  <hr class="section-divider" />
+
+  <!-- ABOUT -->
+  <section class="about-strip" id="about">
+    <div class="about-image">
+      <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=900&q=80" alt="Traveler" />
+    </div>
+    <div class="about-content">
+      <p class="about-eyebrow">About the blog</p>
+      <h2 class="about-title">Hi, I'm Patrick.</h2>
+      <p class="about-text">I travel for work and I travel for the people I love. Along the way I end up in hotel rooms, coffee shops, and food markets I want to remember. This blog is that memory — unfiltered, casual, and mostly honest about the places worth finding.</p>
+      <a href="mailto:contact@gofindpatrick.com" class="hero-btn" style="color:var(--ink);border-color:var(--accent);">Get in touch →</a>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<script>
+  // ── Filter logic ──
+  let activeType = 'all';
+  let activeDest = 'all';
+
+  function applyFilters() {
+    const cards = document.querySelectorAll<HTMLElement>('.post-card');
+    let visible = 0;
+    cards.forEach(card => {
+      const cats = (card.dataset.cats ?? '').split(' ');
+      const typeMatch = activeType === 'all' || cats.includes(activeType);
+      const destMatch = activeDest === 'all' || cats.includes(activeDest);
+      const show = typeMatch && destMatch;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    const empty = document.getElementById('emptyState');
+    if (empty) empty.style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  document.querySelectorAll('.type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeType = (btn as HTMLElement).dataset.value ?? 'all';
+      document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
+    });
+  });
+
+  document.querySelectorAll('.dest-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeDest = (btn as HTMLElement).dataset.value ?? 'all';
+      document.querySelectorAll('.dest-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
+    });
+  });
+</script>

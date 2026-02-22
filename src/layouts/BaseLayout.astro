@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = 'Go Find Patrick',
+  description = 'A personal travel blog covering hotels, food, coffee and travel across Canada, South Korea, Vietnam, Brazil and beyond.',
+  ogImage = 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1200&q=80',
+} = Astro.props;
+
+const pageTitle = title === 'Go Find Patrick' ? title : `${title} — Go Find Patrick`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={description} />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:site_name"   content="Go Find Patrick" />
+  <meta property="og:title"       content={pageTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image"       content={ogImage} />
+  <meta property="og:url"         content={Astro.url} />
+  <meta name="twitter:card"       content="summary_large_image" />
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet" />
+
+  <slot name="head" />
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">Go Find <span>Patrick</span></a>
+    <button class="nav-search" onclick="alert('Search coming soon!')">⌕</button>
+  </nav>
+
+  <slot />
+
+  <footer>
+    <div class="footer-logo">Go Find <span>Patrick</span></div>
+    <p class="footer-copy">© 2026 · gofindpatrick.com · Made with curiosity</p>
+    <div class="footer-social">
+      <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+      <a href="mailto:contact@gofindpatrick.com">Contact</a>
+      <a href="/#about">About</a>
+    </div>
+  </footer>
+
+</body>
+</html>

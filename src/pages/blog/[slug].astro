@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RatingBreakdown from '../../components/RatingBreakdown.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => data.published && !data.comingSoon);
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+// Related posts: same category, exclude current
+const allPosts = await getCollection('blog', ({ data }) => data.published && !data.comingSoon);
+const related = allPosts
+  .filter(p => p.slug !== post.slug && p.data.category === post.data.category)
+  .slice(0, 2);
+
+// If not enough by category, fill from other posts
+if (related.length < 2) {
+  const others = allPosts.filter(p => p.slug !== post.slug && !related.find(r => r.slug === p.slug));
+  related.push(...others.slice(0, 2 - related.length));
+}
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.excerpt}
+  ogImage={post.data.heroImage}
+>
+
+  <!-- POST HERO -->
+  <div class="post-hero">
+    <img src={post.data.heroImage} alt={post.data.title} />
+    <div class="post-hero-overlay">
+      <span class:list={['post-hero-cat', post.data.category]}>
+        {post.data.category.charAt(0).toUpperCase() + post.data.category.slice(1)}
+      </span>
+      <h1 class="post-hero-title">{post.data.title}</h1>
+    </div>
+  </div>
+
+  <!-- POST BODY -->
+  <div class="post-body">
+
+    <!-- MAIN COLUMN -->
+    <div class="post-main">
+      <a href="/" class="back-btn">← Back to all posts</a>
+
+      <div class="post-byline">
+        <span>{post.data.location}</span>
+        <span>{post.data.date}</span>
+        <span>{post.data.readTime}</span>
+      </div>
+
+      <div class="post-content">
+        <Content />
+      </div>
+
+      <!-- GALLERY -->
+      {post.data.gallery && post.data.gallery.length > 0 && (
+        <div class="post-gallery">
+          {post.data.gallery.map((src, i) => (
+            <img src={src} alt={`Photo ${i + 1}`} loading="lazy" />
+          ))}
+        </div>
+      )}
+
+      <!-- RELATED POSTS -->
+      {related.length > 0 && (
+        <div class="related-section">
+          <h2 class="related-title">You might also like</h2>
+          <div class="related-grid">
+            {related.map(rel => (
+              <PostCard
+                slug={rel.slug}
+                title={rel.data.title}
+                excerpt={rel.data.excerpt}
+                date={rel.data.date}
+                location={rel.data.location}
+                category={rel.data.category}
+                country={rel.data.country}
+                cardImage={rel.data.cardImage ?? rel.data.heroImage}
+                breakdown={rel.data.breakdown}
+                readTime={rel.data.readTime}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="post-sidebar">
+      <RatingBreakdown
+        ratingName={post.data.ratingName}
+        breakdown={post.data.breakdown}
+      />
+    </div>
+
+  </div>
+
+</BaseLayout>

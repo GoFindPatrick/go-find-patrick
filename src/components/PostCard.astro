@@ -1,0 +1,55 @@
+---
+interface Breakdown {
+  label: string;
+  score: number;
+}
+
+interface Props {
+  slug: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  location: string;
+  category: string;
+  country: string;
+  cardImage: string;
+  breakdown: Breakdown[];
+  readTime: string;
+  wide?: boolean;
+  comingSoon?: boolean;
+}
+
+const { slug, title, excerpt, date, location, category, country, cardImage, breakdown, readTime, wide = false, comingSoon = false } = Astro.props;
+
+const avg = breakdown.reduce((s, i) => s + i.score, 0) / breakdown.length;
+const avgRounded = Math.round(avg * 10) / 10;
+const fullStars = Math.round(avg);
+
+const cats = `${category} ${country}`;
+---
+
+<a
+  class:list={['post-card', wide && 'wide', comingSoon && 'coming-soon']}
+  href={comingSoon ? '#' : `/blog/${slug}`}
+  data-cats={cats}
+  onclick={comingSoon ? 'event.preventDefault()' : undefined}
+>
+  <div class="card-image">
+    <img src={cardImage} alt={title} loading="lazy" />
+    <span class:list={['card-cat', category]}>{category.charAt(0).toUpperCase() + category.slice(1)}</span>
+    {comingSoon && <span class="coming-soon-badge">Coming Soon</span>}
+  </div>
+  <div class="card-meta">
+    <span class="card-location">📍 {location}</span>
+    <span class="card-date">{date}</span>
+    {!comingSoon && <span class="card-readtime">· {readTime}</span>}
+  </div>
+  <h3 class="card-title">{title}</h3>
+  <p class="card-excerpt">{excerpt}</p>
+  <div class="card-rating">
+    {Array.from({ length: 5 }, (_, i) => (
+      <span class:list={['star', i >= fullStars && 'empty']}>★</span>
+    ))}
+    <span class="rating-num">{avgRounded.toFixed(1)}</span>
+  </div>
+</a>

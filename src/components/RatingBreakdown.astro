@@ -1,0 +1,46 @@
+---
+interface BreakdownItem {
+  label: string;
+  score: number;
+}
+
+interface Props {
+  ratingName: string;
+  breakdown: BreakdownItem[];
+}
+
+const { ratingName, breakdown } = Astro.props;
+const avg = breakdown.reduce((s, i) => s + i.score, 0) / breakdown.length;
+const avgRounded = Math.round(avg * 10) / 10;
+const fullStars = Math.round(avg);
+---
+
+<div class="post-rating-block">
+  <div class="rating-block-label">Patrick's Rating</div>
+  <div class="rating-block-name">{ratingName}</div>
+  <div class="rating-overall">
+    <div class="rating-big">{avgRounded.toFixed(1)}</div>
+    <div class="rating-overall-right">
+      <div class="rating-stars">
+        {Array.from({ length: 5 }, (_, i) => (
+          <span class:list={['star', i >= fullStars && 'empty']}>★</span>
+        ))}
+      </div>
+      <div class="rating-max">out of 5</div>
+    </div>
+  </div>
+  <div class="rating-breakdown">
+    {breakdown.map(item => {
+      const pct = (item.score / 5) * 100;
+      return (
+        <div class="rating-row">
+          <span class="rating-row-label">{item.label}</span>
+          <div class="rating-bar">
+            <div class="rating-bar-fill" style={`width: ${pct}%`}></div>
+          </div>
+          <span class="rating-row-score">{item.score.toFixed(1)}</span>
+        </div>
+      );
+    })}
+  </div>
+</div>
