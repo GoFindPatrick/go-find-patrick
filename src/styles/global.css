@@ -252,7 +252,11 @@ nav {
   aspect-ratio: 16/10;
   object-fit: cover;
   display: block;
+  max-height: 280px;
   transition: transform 0.4s;
+}
+.post-card.wide .card-image img {
+  max-height: 360px;
 }
 .post-card:hover .card-image img { transform: scale(1.03); }
 .card-cat {
@@ -347,6 +351,29 @@ nav {
 .empty-icon { font-size: 2rem; margin-bottom: 1rem; }
 .empty-heading { font-size: 1.1rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--ink); }
 .empty-sub { font-size: 0.85rem; }
+
+/* ── COMING SOON ── */
+.coming-soon-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+.coming-soon-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--warm-gray);
+  margin-bottom: 1.2rem;
+}
+.coming-soon-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.2rem;
+  max-width: 700px;
+}
+@media (max-width: 600px) {
+  .coming-soon-grid { grid-template-columns: 1fr; }
+}
 
 /* ── DIVIDER ── */
 .section-divider {
@@ -499,6 +526,7 @@ footer {
   font-size: 1.05rem;
   line-height: 1.85;
   color: var(--ink);
+  max-width: 680px;
 }
 .post-content p { margin-bottom: 1.4rem; }
 .post-content h2 {
@@ -531,11 +559,14 @@ footer {
 .back-btn:hover { color: var(--accent); }
 
 /* ── GALLERY ── */
+.post-gallery-wrap {
+  padding: 0 4rem 3rem;
+  max-width: 900px;
+}
 .post-gallery {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
-  margin-top: 3rem;
 }
 .post-gallery img {
   width: 100%;
@@ -629,7 +660,11 @@ footer {
 }
 
 /* ── RELATED POSTS ── */
-.related-section { margin-top: 4rem; padding-top: 3rem; border-top: 1px solid var(--border); }
+.related-wrap {
+  padding: 0 4rem 6rem;
+  max-width: 900px;
+}
+.related-section { padding-top: 3rem; border-top: 1px solid var(--border); }
 .related-title {
   font-family: 'Playfair Display', serif;
   font-size: 1.2rem;
@@ -647,17 +682,52 @@ footer {
   .post-grid { grid-template-columns: 1fr 1fr; }
   .post-card.wide { grid-column: span 2; }
   .grid-section { padding: 2rem 1.5rem; }
-  .filter-bar { padding: 1rem 1.5rem; }
+  .filter-bar { padding: 1rem 1.5rem; gap: 1.5rem; }
   .about-strip { grid-template-columns: 1fr; }
   .about-image { height: 280px; }
   .about-content { padding: 3rem 2rem; }
   footer { flex-direction: column; gap: 1.5rem; text-align: center; }
   .post-body { grid-template-columns: 1fr; padding: 2.5rem 2rem 4rem; }
   .post-sidebar { display: none; }
+  .post-gallery-wrap { padding: 0 2rem 3rem; }
+  .related-wrap { padding: 0 2rem 4rem; }
   .related-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 600px) {
+  .nav-logo { font-size: 1.4rem; }
+  .hero { min-height: 45vh; }
+  .hero-content { padding: 1.5rem; }
+  .hero-title { font-size: 1.6rem; }
+  .hero-excerpt { font-size: 0.88rem; margin-bottom: 1.2rem; }
+  .hero-rating { margin-bottom: 1.2rem; }
+  .filter-bar {
+    padding: 0.8rem 1rem;
+    gap: 0.8rem;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-group { flex-wrap: nowrap; gap: 0.4rem; }
+  .filter-label { font-size: 0.7rem; margin-right: 0.2rem; }
+  .filter-btn { padding: 0.4rem 0.8rem; font-size: 0.78rem; }
   .post-grid { grid-template-columns: 1fr; }
   .post-card.wide { grid-column: span 1; }
+  .card-image img { max-height: 220px; }
+  .grid-section { padding: 1.5rem 1rem 3rem; }
+  .section-title { font-size: 1.3rem; }
+  .about-content { padding: 2rem 1.5rem; }
+  .about-title { font-size: 1.6rem; }
+  .about-text { font-size: 0.88rem; }
+  .post-hero { height: 40vh; }
+  .post-hero-title { font-size: 1.3rem; }
+  .post-hero-overlay { padding: 1.5rem; }
+  .post-body { padding: 1.5rem 1rem 3rem; }
+  .post-content { font-size: 0.95rem; }
+  .post-gallery-wrap { padding: 0 1rem 2rem; }
+  .post-gallery { grid-template-columns: 1fr; }
+  .post-gallery img:first-child { grid-column: span 1; aspect-ratio: 4/3; }
+  .related-wrap { padding: 0 1rem 3rem; }
+  .related-grid { grid-template-columns: 1fr; }
+  footer { padding: 2rem 1.5rem; }
 }

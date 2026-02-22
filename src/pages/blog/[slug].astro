@@ -49,7 +49,7 @@ if (related.length < 2) {
     </div>
   </div>
 
-  <!-- POST BODY -->
+  <!-- POST BODY (article + sidebar) -->
   <div class="post-body">
 
     <!-- MAIN COLUMN -->
@@ -65,41 +65,9 @@ if (related.length < 2) {
       <div class="post-content">
         <Content />
       </div>
-
-      <!-- GALLERY -->
-      {post.data.gallery && post.data.gallery.length > 0 && (
-        <div class="post-gallery">
-          {post.data.gallery.map((src, i) => (
-            <img src={src} alt={`Photo ${i + 1}`} loading="lazy" />
-          ))}
-        </div>
-      )}
-
-      <!-- RELATED POSTS -->
-      {related.length > 0 && (
-        <div class="related-section">
-          <h2 class="related-title">You might also like</h2>
-          <div class="related-grid">
-            {related.map(rel => (
-              <PostCard
-                slug={rel.slug}
-                title={rel.data.title}
-                excerpt={rel.data.excerpt}
-                date={rel.data.date}
-                location={rel.data.location}
-                category={rel.data.category}
-                country={rel.data.country}
-                cardImage={rel.data.cardImage ?? rel.data.heroImage}
-                breakdown={rel.data.breakdown}
-                readTime={rel.data.readTime}
-              />
-            ))}
-          </div>
-        </div>
-      )}
     </div>
 
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR (sticky only within post-body) -->
     <div class="post-sidebar">
       <RatingBreakdown
         ratingName={post.data.ratingName}
@@ -108,5 +76,41 @@ if (related.length < 2) {
     </div>
 
   </div>
+
+  <!-- GALLERY (full width, outside the grid so sidebar doesn't follow) -->
+  {post.data.gallery && post.data.gallery.length > 0 && (
+    <div class="post-gallery-wrap">
+      <div class="post-gallery">
+        {post.data.gallery.map((src, i) => (
+          <img src={src} alt={`Photo ${i + 1}`} loading="lazy" />
+        ))}
+      </div>
+    </div>
+  )}
+
+  <!-- RELATED POSTS -->
+  {related.length > 0 && (
+    <div class="related-wrap">
+      <div class="related-section">
+        <h2 class="related-title">You might also like</h2>
+        <div class="related-grid">
+          {related.map(rel => (
+            <PostCard
+              slug={rel.slug}
+              title={rel.data.title}
+              excerpt={rel.data.excerpt}
+              date={rel.data.date}
+              location={rel.data.location}
+              category={rel.data.category}
+              country={rel.data.country}
+              cardImage={rel.data.cardImage ?? rel.data.heroImage}
+              breakdown={rel.data.breakdown}
+              readTime={rel.data.readTime}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  )}
 
 </BaseLayout>

@@ -22,7 +22,7 @@ const comingSoon = [
     slug: 'arriving-rio',
     title: 'Arriving in Rio After 22 Hours in the Air',
     excerpt: "Some cities hit you the moment the door opens. The humidity, the noise, the green of the hills — Rio doesn't wait for you to be ready.",
-    date: 'Oct 2025',
+    date: 'October 2025',
     location: 'Rio de Janeiro, Brazil',
     category: 'travel',
     country: 'brazil',
@@ -34,7 +34,7 @@ const comingSoon = [
     slug: 'nemesis-coffee-vancouver',
     title: 'Nemesis Coffee — The Neighbourhood Place That Isn\'t Trying Hard',
     excerpt: 'Good coffee, a nice stool by the window, and nobody asking you to leave. Sometimes that\'s everything.',
-    date: 'Sep 2025',
+    date: 'September 2025',
     location: 'Vancouver, Canada',
     category: 'coffee',
     country: 'canada',
@@ -142,22 +142,7 @@ const allCountries = [...new Set([
 
     <div class="post-grid" id="postGrid">
 
-      <!-- Featured post as wide card -->
-      <PostCard
-        slug={featured.slug}
-        title={featured.data.title}
-        excerpt={featured.data.excerpt}
-        date={featured.data.date}
-        location={featured.data.location}
-        category={featured.data.category}
-        country={featured.data.country}
-        cardImage={featured.data.cardImage ?? featured.data.heroImage}
-        breakdown={featured.data.breakdown}
-        readTime={featured.data.readTime}
-        wide={true}
-      />
-
-      <!-- Remaining published posts -->
+      <!-- Published posts (featured already shown in hero) -->
       {gridPosts.map(post => (
         <PostCard
           slug={post.slug}
@@ -173,24 +158,31 @@ const allCountries = [...new Set([
         />
       ))}
 
-      <!-- Coming soon stubs -->
-      {comingSoon.map(stub => (
-        <PostCard
-          slug={stub.slug}
-          title={stub.title}
-          excerpt={stub.excerpt}
-          date={stub.date}
-          location={stub.location}
-          category={stub.category}
-          country={stub.country}
-          cardImage={stub.cardImage}
-          breakdown={stub.breakdown}
-          readTime={stub.readTime}
-          comingSoon={true}
-        />
-      ))}
-
     </div>
+
+    <!-- Coming soon — separate smaller row -->
+    {comingSoon.length > 0 && (
+      <div class="coming-soon-section">
+        <h3 class="coming-soon-heading">Coming up next</h3>
+        <div class="coming-soon-grid">
+          {comingSoon.map(stub => (
+            <PostCard
+              slug={stub.slug}
+              title={stub.title}
+              excerpt={stub.excerpt}
+              date={stub.date}
+              location={stub.location}
+              category={stub.category}
+              country={stub.country}
+              cardImage={stub.cardImage}
+              breakdown={stub.breakdown}
+              readTime={stub.readTime}
+              comingSoon={true}
+            />
+          ))}
+        </div>
+      </div>
+    )}
 
     <div class="empty-state" id="emptyState" style="display:none;">
       <p class="empty-icon">✈️</p>
@@ -205,7 +197,7 @@ const allCountries = [...new Set([
   <!-- ABOUT -->
   <section class="about-strip" id="about">
     <div class="about-image">
-      <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=900&q=80" alt="Traveler" />
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&q=80" alt="Travel scene" />
     </div>
     <div class="about-content">
       <p class="about-eyebrow">About the blog</p>
