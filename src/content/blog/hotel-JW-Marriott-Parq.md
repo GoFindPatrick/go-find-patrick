@@ -10,17 +10,17 @@ cardImage: "https://cache.marriott.com/is/image/marriotts7prod/jw-yvrjw-jw-garde
 ratingName: "JW Marriott Parq Vancouver"
 breakdown:
   - label: "Rooms"
-    score: 9.0
+    score: 4.5
   - label: "Service"
-    score: 8.8
+    score: 4.4
   - label: "Amenities"
-    score: 9.2
+    score: 4.6
   - label: "Food & Drink"
-    score: 8.6
+    score: 4.3
   - label: "Location"
-    score: 9.4
+    score: 4.7
   - label: "Value"
-    score: 8.2
+    score: 4.1
 readTime: "6 min read"
 published: true
 featured: true
