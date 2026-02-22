@@ -7,7 +7,7 @@ const blog = defineCollection({
     excerpt: z.string(),
     date: z.string(),
     location: z.string(),
-    country: z.enum(['canada', 'korea', 'vietnam', 'brazil', 'other']),
+    country: z.string(),
     category: z.enum(['hotel', 'food', 'coffee', 'travel']),
     heroImage: z.string().url(),
     cardImage: z.string().url().optional(),

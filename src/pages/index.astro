@@ -16,6 +16,44 @@ const featuredStars = Math.round(featuredAvg);
 // Remaining posts for the grid
 const gridPosts = allPosts.filter(p => p.slug !== featured.slug);
 
+// Flag emoji map — add new countries here as you visit them
+const flagMap: Record<string, string> = {
+  canada: '🇨🇦',
+  korea: '🇰🇷',
+  vietnam: '🇻🇳',
+  brazil: '🇧🇷',
+  japan: '🇯🇵',
+  france: '🇫🇷',
+  italy: '🇮🇹',
+  spain: '🇪🇸',
+  thailand: '🇹🇭',
+  mexico: '🇲🇽',
+  australia: '🇦🇺',
+  uk: '🇬🇧',
+  usa: '🇺🇸',
+  portugal: '🇵🇹',
+  indonesia: '🇮🇩',
+  singapore: '🇸🇬',
+  taiwan: '🇹🇼',
+  hongkong: '🇭🇰',
+  colombia: '🇨🇴',
+  peru: '🇵🇪',
+  argentina: '🇦🇷',
+  germany: '🇩🇪',
+  netherlands: '🇳🇱',
+  greece: '🇬🇷',
+  turkey: '🇹🇷',
+  india: '🇮🇳',
+  morocco: '🇲🇦',
+};
+
+// Build unique sorted country list from all posts + coming-soon stubs
+const comingSoonCountries = comingSoon.map(s => s.country);
+const allCountries = [...new Set([
+  ...allPosts.map(p => p.data.country),
+  ...comingSoonCountries,
+])].sort();
+
 // Coming-soon stubs (add real entries to src/content/blog/ when ready)
 const comingSoon = [
   {
@@ -81,10 +119,11 @@ const comingSoon = [
     <div class="filter-group">
       <span class="filter-label">Destination</span>
       <button class="filter-btn dest-btn active" data-value="all">All</button>
-      <button class="filter-btn dest-btn" data-value="canada">🇨🇦 Canada</button>
-      <button class="filter-btn dest-btn" data-value="korea">🇰🇷 Korea</button>
-      <button class="filter-btn dest-btn" data-value="vietnam">🇻🇳 Vietnam</button>
-      <button class="filter-btn dest-btn" data-value="brazil">🇧🇷 Brazil</button>
+      {allCountries.map(country => {
+        const flag = flagMap[country.toLowerCase()] ?? '🌍';
+        const label = country.charAt(0).toUpperCase() + country.slice(1);
+        return <button class="filter-btn dest-btn" data-value={country}>{flag} {label}</button>;
+      })}
     </div>
     <div class="filter-group">
       <span class="filter-label">Type</span>
